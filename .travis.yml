@@ -8,4 +8,6 @@ before_install:
 before_script:
   - bower install
 install: npm install
-after_success: grunt coveralls
+after_success:
+  - sudo ls -alh .coverage-results
+  - sudo cat .coverage-results/all.lcov
