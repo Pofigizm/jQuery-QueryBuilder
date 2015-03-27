@@ -470,7 +470,7 @@ module.exports = function(grunt) {
 
         var files = {};
         this.files.forEach(function(file) {
-            files[path.relative(process.cwd(), file.src[0])] = true;
+            files[file.src[0]] = true;
         });
         
         grunt.log.writeln(JSON.stringify(files));
@@ -479,12 +479,13 @@ module.exports = function(grunt) {
             var str = '';
 
             for (var file in data) {
-                var relFile = path.relative(process.cwd(), file.replace('file:///', ''));
+                var cleanFile = file.replace('file://', '').replace(/^\/([A-Z]{1}:\/)/, '$1');
+                var relFile = path.relative(process.cwd(), cleanFile).split(path.sep).join('/');
                 
                 grunt.log.writeln(relFile + ' ' + data[file].length);
 
                 if (files[relFile]) {
-                    str+= 'SF:' + relFile.split(path.sep).join('/') + '\n';
+                    str+= 'SF:' + relFile + '\n';
 
                     data[file].forEach(function(val, line) {
                         if (val !== undefined && val !== null) {
